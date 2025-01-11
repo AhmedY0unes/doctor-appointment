@@ -13,6 +13,7 @@ export class AppointmentMapper {
       reservedAt: doctorAppointment.scheduledAt, // map scheduledAt to reservedAt
       createdAt: doctorAppointment.createdAt,
       updatedAt: doctorAppointment.updatedAt,
+      time: doctorAppointment.time,
     };
   }
 }

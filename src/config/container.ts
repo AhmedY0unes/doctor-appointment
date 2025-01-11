@@ -25,8 +25,8 @@ import { NotificationService } from "../modules/appointment-confirmation/notific
 // Doctor Management (Hexagonal Architecture)
 import { AppointmentManagementController } from "../modules/doctor-management/ports/incoming/appointment-management.controller";
 import { AppointmentManagementService } from "../modules/doctor-management/application/appointment-management.service";
-import { MongoAppointmentRepository as DoctorMongoAppointmentRepository } from "../modules/doctor-management/infrastructure/persistence/mongo-appointment.repository";
 import { NotificationServiceAdapter } from "../modules/doctor-management/infrastructure/adapters/notification.service.adapter";
+import { DoctorMongoAppointmentRepository } from "../modules/doctor-management/infrastructure/persistence/doctor-mongo-appointment.repository";
 
 export interface ContainerDependencies {
   // Core
@@ -42,15 +42,15 @@ export interface ContainerDependencies {
   appointmentController: AppointmentController;
   createAppointmentUseCase: CreateAppointmentUseCase;
   getAppointmentUseCase: GetAppointmentUseCase;
-  appointmentRepository: MongoAppointmentRepository;
+  bookingAppointmentRepository: MongoAppointmentRepository;
 
   // Appointment Confirmation (Simple)
   notificationService: NotificationService;
 
   // Doctor Management (Hexagonal)
+  doctorAppointmentRepository: DoctorMongoAppointmentRepository;
   appointmentManagementController: AppointmentManagementController;
   appointmentManagementService: AppointmentManagementService;
-  doctorAppointmentRepository: DoctorMongoAppointmentRepository;
   notificationServiceAdapter: NotificationServiceAdapter;
 }
 
@@ -72,10 +72,12 @@ export function createDIContainer(
     slotRepository: asClass(SlotRepository).singleton(),
 
     // Appointment Booking (Clean)
+    bookingAppointmentRepository: asClass(
+      MongoAppointmentRepository
+    ).singleton(),
     appointmentController: asClass(AppointmentController).singleton(),
     createAppointmentUseCase: asClass(CreateAppointmentUseCase).singleton(),
     getAppointmentUseCase: asClass(GetAppointmentUseCase).singleton(),
-    appointmentRepository: asClass(MongoAppointmentRepository).singleton(),
 
     // Appointment Confirmation (Simple)
     notificationService: asClass(NotificationService).singleton(),

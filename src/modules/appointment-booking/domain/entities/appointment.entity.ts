@@ -5,6 +5,7 @@ export interface AppointmentEntity extends BaseEntity {
   patientId: string;
   patientName: string;
   doctorId: string;
+  time: Date;
   status: "scheduled" | "completed" | "cancelled";
   reservedAt: Date;
 }
@@ -16,6 +17,7 @@ export class Appointment implements AppointmentEntity {
   patientName: string;
   doctorId: string;
   status: "scheduled" | "completed" | "cancelled";
+  time: Date;
   reservedAt: Date;
   createdAt!: Date;
   updatedAt!: Date;
@@ -27,5 +29,6 @@ export class Appointment implements AppointmentEntity {
     this.doctorId = data.doctorId;
     this.status = data.status;
     this.reservedAt = data.reservedAt;
+    this.time = data.time;
   }
 }

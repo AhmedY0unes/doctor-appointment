@@ -9,7 +9,7 @@ export class NotificationServiceAdapter implements NotificationServicePort {
   async notifyAppointmentStatusChange(
     appointment: DoctorAppointment
   ): Promise<void> {
-    this.notificationService.sendStatusUpdate(
+    await this.notificationService.sendStatusUpdate(
       AppointmentMapper.toAppointment(appointment)
     );
   }

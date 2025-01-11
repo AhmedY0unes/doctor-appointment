@@ -5,7 +5,7 @@ import { SlotService } from "../../../doctor-availability/layers/business/slot.s
 
 export class CreateAppointmentUseCase {
   constructor(
-    private readonly appointmentRepository: IAppointmentRepository,
+    private readonly bookingAppointmentRepository: IAppointmentRepository,
     private readonly slotService: SlotService,
     private readonly notificationService: NotificationService
   ) {}
@@ -21,11 +21,11 @@ export class CreateAppointmentUseCase {
     if (!slot) {
       return null;
     }
-
     // Create the appointment
-    const appointment = await this.appointmentRepository.create({
+    const appointment = await this.bookingAppointmentRepository.create({
       ...data,
       status: "scheduled",
+      time: slot.time,
       reservedAt: new Date(),
     });
 

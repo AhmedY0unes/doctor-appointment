@@ -1,3 +1,4 @@
+import cuid from "cuid";
 import { BaseRepository } from "../../../../shared/types";
 import { Slot, SlotModel } from "../../models/slot.model";
 
@@ -5,7 +6,10 @@ export class SlotRepository implements BaseRepository<Slot> {
   async create(
     data: Omit<Slot, "id" | "createdAt" | "updatedAt">
   ): Promise<Slot> {
-    const slot = await SlotModel.create(data);
+    const slot = await SlotModel.create({
+      _id: cuid(),
+      ...data,
+    });
     return slot.toJSON();
   }
 

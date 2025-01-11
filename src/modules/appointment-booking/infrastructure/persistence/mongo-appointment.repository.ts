@@ -1,12 +1,19 @@
 import { IAppointmentRepository } from "../../domain/repositories/appointment.repository.interface";
 import { AppointmentEntity } from "../../domain/entities/appointment.entity";
-import { AppointmentModel, AppointmentDocument } from "./appointment.model";
+import {
+  AppointmentModel,
+  AppointmentDocument,
+} from "../../../../shared/models/appointment.model";
+import cuid from "cuid";
 
 export class MongoAppointmentRepository implements IAppointmentRepository {
   async create(
     data: Omit<AppointmentEntity, "id" | "createdAt" | "updatedAt">
   ): Promise<AppointmentEntity> {
-    const appointment = await AppointmentModel.create(data);
+    const appointment = await AppointmentModel.create({
+      _id: cuid(),
+      ...data,
+    });
     return appointment.toJSON();
   }
 
@@ -41,7 +48,7 @@ export class MongoAppointmentRepository implements IAppointmentRepository {
     const appointments = await AppointmentModel.find({
       doctorId,
       status: "scheduled",
-    }).sort({ reservedAt: 1 });
+    }).sort({ scheduledAt: 1 });
     return appointments.map((appointment: AppointmentDocument) =>
       appointment.toJSON()
     );

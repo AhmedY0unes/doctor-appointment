@@ -20,7 +20,7 @@ export class SlotService {
 
   async reserveSlot(id: string): Promise<Slot | null> {
     const slot = await this.slotRepository.findById(id);
-    if (!slot || slot.isReserved) {
+    if (slot?.isReserved) {
       return null;
     }
     return this.slotRepository.update(id, { isReserved: true });

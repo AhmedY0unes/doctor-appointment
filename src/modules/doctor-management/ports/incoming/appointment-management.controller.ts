@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AppointmentManagementService } from "../../application/appointment-management.service";
+import mongoose from "mongoose";
 
 export class AppointmentManagementController {
   constructor(
@@ -8,17 +9,20 @@ export class AppointmentManagementController {
 
   async getUpcomingAppointments(req: Request, res: Response): Promise<void> {
     try {
-      console.log(req.params);
       const appointments =
-        await this.appointmentManagementService.getUpcomingAppointments(
+        await this.appointmentManagementService.getAppointmentsByDoctorId(
           req.params.doctorId
         );
       res.json(appointments);
     } catch (error) {
-      console.log(error);
+      console.error("Error getting upcoming appointments:", error);
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(404).json({ message: "Doctor not found" });
+        return;
+      }
       res.status(500).json({
         message: "Failed to get upcoming appointments",
-        error,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -35,9 +39,18 @@ export class AppointmentManagementController {
       }
       res.json(appointment);
     } catch (error) {
+      console.error("Error completing appointment:", error);
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(404).json({ message: "Appointment not found" });
+        return;
+      }
+      if (error instanceof Error && error.message === "Appointment not found") {
+        res.status(404).json({ message: "Appointment not found" });
+        return;
+      }
       res.status(500).json({
         message: "Failed to complete appointment",
-        error,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -54,9 +67,18 @@ export class AppointmentManagementController {
       }
       res.json(appointment);
     } catch (error) {
+      console.error("Error cancelling appointment:", error);
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(404).json({ message: "Appointment not found" });
+        return;
+      }
+      if (error instanceof Error && error.message === "Appointment not found") {
+        res.status(404).json({ message: "Appointment not found" });
+        return;
+      }
       res.status(500).json({
         message: "Failed to cancel appointment",
-        error,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }

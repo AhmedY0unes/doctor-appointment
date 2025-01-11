@@ -35,6 +35,10 @@ export class AppointmentController {
       }
       res.json(appointment);
     } catch (error) {
+      if (error instanceof Error && error.message === "Appointment not found") {
+        res.status(404).json({ message: "Appointment not found" });
+        return;
+      }
       res.status(500).json({ message: "Failed to get appointment", error });
     }
   }

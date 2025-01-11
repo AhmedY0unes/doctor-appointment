@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { SlotService } from "../business/slot.service";
+import mongoose from "mongoose";
 
 export class SlotController {
   constructor(private readonly slotService: SlotService) {}
@@ -44,6 +45,14 @@ export class SlotController {
       }
       res.json(slot);
     } catch (error) {
+      if (error instanceof Error && error.message === "Slot not found") {
+        res.status(404).json({ message: "Slot not found" });
+        return;
+      }
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(404).json({ message: "Slot not found" });
+        return;
+      }
       res.status(500).json({ message: "Failed to reserve slot", error });
     }
   }

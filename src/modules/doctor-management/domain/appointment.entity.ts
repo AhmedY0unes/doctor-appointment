@@ -1,4 +1,5 @@
 export interface DoctorAppointment {
+  _id: string;
   id: string;
   doctorId: string;
   patientId: string;
@@ -8,15 +9,18 @@ export interface DoctorAppointment {
   scheduledAt: Date;
   createdAt: Date;
   updatedAt: Date;
+  time: Date;
 }
 
 export class DoctorAppointmentEntity implements DoctorAppointment {
+  _id!: string;
   id!: string;
   doctorId: string;
   patientId: string;
   patientName: string;
   slotId: string;
   status: "scheduled" | "completed" | "cancelled";
+  time: Date;
   scheduledAt: Date;
   createdAt!: Date;
   updatedAt!: Date;
@@ -28,6 +32,7 @@ export class DoctorAppointmentEntity implements DoctorAppointment {
     this.slotId = data.slotId;
     this.status = data.status;
     this.scheduledAt = data.scheduledAt;
+    this.time = data.time;
   }
 
   complete(): void {

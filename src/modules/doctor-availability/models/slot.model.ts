@@ -11,6 +11,7 @@ export interface Slot extends BaseEntity {
 
 const slotSchema = new mongoose.Schema(
   {
+    _id: { type: String, required: true },
     time: { type: Date, required: true },
     doctorId: { type: String, required: true },
     doctorName: { type: String, required: true },
@@ -18,13 +19,14 @@ const slotSchema = new mongoose.Schema(
     cost: { type: Number, required: true },
   },
   {
+    _id: false,
     timestamps: true,
+    versionKey: false,
     toJSON: {
       virtuals: true,
       transform: function (_, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
         return ret;
       },
     },
