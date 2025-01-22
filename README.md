@@ -87,6 +87,10 @@ src/
 └── routes.ts         # Route definitions
 ```
 
+## Diagrams
+![Doctor-app drawio](https://github.com/user-attachments/assets/367e6995-f4a2-415a-a715-c76446ddc204)
+
+
 ## Testing
 
 Run the tests using:
